@@ -1,0 +1,19 @@
+# TACV Quota Scenario Modeling App Dependencies
+# For local development
+
+streamlit>=1.28.0
+pandas>=2.0.0
+python-dateutil>=2.8.2
+
+# For Snowflake deployment, these are provided by the platform:
+# snowflake-snowpark-python
+# snowflake-ml-python (for Cortex)
+
+
+
+
+
+
+
+
+
