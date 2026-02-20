@@ -1,0 +1,95 @@
+name: tacv-quota-analysis
+title: TACV Quota Scenario Modeling
+description: >
+  Generate data-driven TACV (Total Annual Contract Value) quota recommendations
+  for Snowflake customer accounts. Pulls consumption, capacity, contract, and
+  account data from multiple Snowflake tables and Salesforce, then produces
+  Conservative / Base / Stretch scenarios with quota-bearing classification,
+  guardrail validation, and strategic option evaluation.
+
+# Trigger keywords — Cortex Code activates this skill when it detects these terms
+triggers:
+  - tacv
+  - quota
+  - renewal analysis
+  - account plan
+  - consumption analysis
+  - capacity remaining
+  - burn rate
+  - overage
+  - contract structure
+  - quota-bearing
+  - growth acv
+  - renewal acv
+  - pull-forward
+  - amendment
+  - early renewal
+  - scenario modeling
+  - quota recommendation
+
+# Data sources this skill reads from
+data_sources:
+  - name: SALES.PLANNING.GLOBAL_PLANNING
+    type: table
+    role: primary
+    description: >
+      Daily snapshot of all named accounts with consumption, capacity,
+      territory, and contract fields. Values in ACTUAL DOLLARS (not $K).
+    join_key: ACCOUNT_ID
+
+  - name: FIVETRAN.SALESFORCE.CONTRACT
+    type: table
+    role: contract_structure
+    description: >
+      Salesforce contract records via Fivetran. Provides CONTRACT_TERM
+      for determining single-year vs multi-year and total segments.
+    join_key: ACCOUNT_ID
+
+  - name: FIVETRAN.SALESFORCE.OPPORTUNITY
+    type: table
+    role: pipeline_validation
+    description: >
+      Salesforce opportunities for cross-validating TACV recommendations
+      against existing pipeline, forecast, and ACV fields.
+    join_key: ACCOUNT_ID
+
+  - name: FIVETRAN.SALESFORCE.ACCOUNT
+    type: table
+    role: enrichment
+    description: >
+      Salesforce account records with risk indicators, strategic notes,
+      maturity scores, and financial context. 879 columns.
+    join_key: ID
+
+  - name: SALES.SALES_BI.GLOBAL_ACCOUNT_DATA
+    type: view
+    role: supplementary
+    description: >
+      Supplementary source for FY27 consumption predictions and alternate
+      run rate calculations. Values in ACTUAL DOLLARS.
+    join_key: ACCOUNT_ID
+
+# Output format
+output:
+  type: structured_report
+  sections:
+    - account_summary
+    - data_flags
+    - renewal_events
+    - strategic_options
+    - scenarios_table
+    - recommendation
+    - guardrail_results
+    - validation_needed
+    - consistency_check
+
+# Skill metadata
+version: "2.0"
+author: Jeff (GTM Operations)
+last_updated: "2026-02-20"
+tags:
+  - field-operations
+  - quota-planning
+  - sales-strategy
+  - consumption-analytics
+  - renewal-management
