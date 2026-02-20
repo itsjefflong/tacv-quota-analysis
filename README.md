@@ -267,7 +267,6 @@ move %USERPROFILE%\Downloads\tacv-quota-analysis %USERPROFILE%\.cortex\skills\
 
 For questions about the skill logic, data sources, or TACV methodology, contact GTM Operations.
 
-For Cortex Code platform issues, refer to the [Snowflake Cortex documentation](https://docs.snowflake.com/en/user-guide/snowflake-cortex).
 
 ## Maintainer
 
