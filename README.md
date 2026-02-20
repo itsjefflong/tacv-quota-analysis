@@ -14,26 +14,36 @@ Given an account name or Salesforce Account ID, this skill:
 6. **Validates against guardrails** (BCR, minimum TACV, consumption floor, churn concentration)
 7. **Cross-validates** against existing SFDC pipeline opportunities
 
+---
+
 ## Installation
 
-### Prerequisites
+### Quick Install (Recommended)
 
-- Snowflake Cortex Code access
-- Read access to the following tables:
-  - `SALES.PLANNING.GLOBAL_PLANNING`
-  - `FIVETRAN.SALESFORCE.CONTRACT`
-  - `FIVETRAN.SALESFORCE.OPPORTUNITY`
-  - `FIVETRAN.SALESFORCE.ACCOUNT`
-  - `SALES.SALES_BI.GLOBAL_ACCOUNT_DATA`
+If you're not comfortable with terminal commands, let Cortex Code do it for you:
 
-### Step 1: Download the Skill
+1. Download the ZIP from: [`https://github.com/itsjefflong/tacv-quota-analysis`](https://github.com/itsjefflong/tacv-quota-analysis) (green **Code** button → **Download ZIP**)
+2. Extract the ZIP to your Downloads folder
+3. Open Cortex Code and paste:
+
+> *"I downloaded the tacv-quota-analysis skill ZIP from GitHub and extracted it to my Downloads folder. The folder is probably named `tacv-quota-analysis-main`. Can you help me rename it to `tacv-quota-analysis` and move it to my Cortex skills directory? I'm on [macOS/Windows/Linux]."*
+
+Cortex Code will handle the rest.
+
+### Manual Install
+
+#### Prerequisites
+
+- Snowflake Cortex Code installed and running
+
+#### Step 1: Download and Extract
 
 1. Go to: [`https://github.com/itsjefflong/tacv-quota-analysis`](https://github.com/itsjefflong/tacv-quota-analysis)
-2. Click the green **Code** button
-3. Select **Download ZIP**
-4. Extract the ZIP file
+2. Click the green **Code** button → **Download ZIP**
+3. Extract the ZIP file
+4. **Important:** GitHub names the extracted folder `tacv-quota-analysis-main`. Rename it to `tacv-quota-analysis` before proceeding.
 
-You should see this structure after extraction:
+After renaming, you should see:
 
 ```
 tacv-quota-analysis/
@@ -42,37 +52,55 @@ tacv-quota-analysis/
 └── README.md       # This file
 ```
 
-### Step 2: Install to Cortex Code
+#### Step 2: Install to Cortex Code
 
-Move the extracted folder to your Cortex skills directory.
+Move the renamed folder to your Cortex skills directory.
 
 **macOS / Linux:**
 
 ```bash
+# Rename the GitHub download folder
+mv ~/Downloads/tacv-quota-analysis-main ~/Downloads/tacv-quota-analysis
+
+# Create the skills directory if it doesn't exist
 mkdir -p ~/.cortex/skills
+
+# Move the skill into place
 mv ~/Downloads/tacv-quota-analysis ~/.cortex/skills/
+
+# Verify
 ls ~/.cortex/skills/tacv-quota-analysis/
+# Expected: prompt.md  README.md  skill.yaml
 ```
 
 **Windows:**
 
 ```powershell
+# Rename the GitHub download folder
+ren %USERPROFILE%\Downloads\tacv-quota-analysis-main tacv-quota-analysis
+
+# Create the skills directory if it doesn't exist
 mkdir %USERPROFILE%\.cortex\skills
+
+# Move the skill into place
 move %USERPROFILE%\Downloads\tacv-quota-analysis %USERPROFILE%\.cortex\skills\
+
+# Verify
 dir %USERPROFILE%\.cortex\skills\tacv-quota-analysis\
+# Expected: prompt.md  README.md  skill.yaml
 ```
 
-> **Note:** If your Cortex Code installation uses a custom skills directory, replace the path above with your configured location. Check your Cortex Code settings or ask your admin.
+> **Note:** If your Cortex Code uses a custom skills directory, replace the paths above. Check your Cortex Code settings or ask your admin for the correct location.
 
-### Step 3: Verify Installation
+#### Step 3: Verify Installation
 
 1. Restart Cortex Code or open a new chat session
 2. Test by asking: *"Run a TACV analysis for [any account name]"*
-3. If the skill activates and begins searching `SALES.PLANNING.GLOBAL_PLANNING`, you're good
+3. If the skill activates and begins querying `SALES.PLANNING.GLOBAL_PLANNING`, you're all set
 
-### Step 4: Verify Data Access
+#### Step 4: Verify Data Access
 
-If the skill activates but queries fail, check your Snowflake role has SELECT access:
+The skill requires read access to 5 Snowflake tables. If it activates but queries return errors, run these checks:
 
 ```sql
 SELECT COUNT(*) FROM SALES.PLANNING.GLOBAL_PLANNING WHERE SNAPSHOT_DATE = CURRENT_DATE();
@@ -82,7 +110,9 @@ SELECT COUNT(*) FROM FIVETRAN.SALESFORCE.ACCOUNT WHERE IS_DELETED = FALSE;
 SELECT COUNT(*) FROM SALES.SALES_BI.GLOBAL_ACCOUNT_DATA;
 ```
 
-If any query returns a permission error, contact your Snowflake admin for the appropriate role grants.
+If any query returns a permission error, contact your Snowflake admin for the appropriate role grants. The skill will still install and activate without these — you just need the grants before it can pull data.
+
+---
 
 ## How to Use
 
@@ -96,6 +126,8 @@ Ask Cortex Code any of these:
 
 The skill walks through each step, pausing for confirmation before proceeding.
 
+---
+
 ## Data Sources
 
 | Source | Table | What It Provides |
@@ -105,6 +137,8 @@ The skill walks through each step, pausing for confirmation before proceeding.
 | Opportunity | `FIVETRAN.SALESFORCE.OPPORTUNITY` | Pipeline ACV, forecast, stage, growth validation |
 | Account | `FIVETRAN.SALESFORCE.ACCOUNT` | Risk scores, strategic notes, maturity, financials |
 | Prediction | `SALES.SALES_BI.GLOBAL_ACCOUNT_DATA` | FY27 consumption prediction (supplementary) |
+
+---
 
 ## Key Concepts
 
@@ -151,6 +185,8 @@ Combined with `OUT_YEAR_SEGMENT_INDEX`, this determines if the account is in its
 | Churn Concentration | ≤ 10% of territory (declining) | RVP + Field Ops |
 | Growth Reasonability | Flag if > 100% growth | Info only |
 
+---
+
 ## Critical Data Rules
 
 | Rule | Why It Matters |
@@ -160,6 +196,8 @@ Combined with `OUT_YEAR_SEGMENT_INDEX`, this determines if the account is in its
 | FY Predictions have **minimal influence** | Scenarios are based on L90D/L30D consumption, not predictions |
 | Negative overage = **surplus** | A value like -$54K means $54K of unused capacity, not a deficit |
 
+---
+
 ## Snowflake Fiscal Year
 
 | FY | Start | End |
@@ -167,6 +205,8 @@ Combined with `OUT_YEAR_SEGMENT_INDEX`, this determines if the account is in its
 | FY26 | 2025-02-01 | 2026-01-31 |
 | FY27 | 2026-02-01 | 2027-01-31 |
 | FY28 | 2027-02-01 | 2028-01-31 |
+
+---
 
 ## Output Format
 
@@ -182,34 +222,39 @@ The skill produces a structured report with these sections:
 8. **Validation Needed** — Priority items for Field Ops/AE to verify
 9. **Consistency Check** — Cross-validation of recommendation vs. data
 
+---
+
 ## Troubleshooting
 
 | Issue | Solution |
 |-------|----------|
-| Skill doesn't appear after restart | Verify `skill.yaml` is in the skill folder root, not nested in a subfolder |
-| Skill triggers but no data returns | Check Snowflake role permissions (see Verify Data Access above) |
+| Skill doesn't appear after restart | Verify `skill.yaml` is in the skill folder root, not nested in a subfolder (e.g., `skills/tacv-quota-analysis/tacv-quota-analysis-main/skill.yaml` is wrong) |
+| Skill triggers but no data returns | Check Snowflake role permissions (see Step 4 above) |
 | Incorrect dollar amounts (too high/low) | Confirm GLOBAL_PLANNING values are actual $ — do NOT multiply by 1,000 |
 | Contract structure shows "unknown" | Verify `FIVETRAN.SALESFORCE.CONTRACT` is accessible and has active contracts |
 | "Insufficient consumption history" | Account has zero L90D — likely a new account with no usage yet |
 
-## Updating the Skill
+---
 
-To update to a newer version:
+## Updating
 
 1. Download the latest release from [`https://github.com/itsjefflong/tacv-quota-analysis`](https://github.com/itsjefflong/tacv-quota-analysis)
-2. Replace the files in your skills directory:
+2. Replace the existing skill folder:
 
 ```bash
 # macOS / Linux
 rm -rf ~/.cortex/skills/tacv-quota-analysis
-mv ~/Downloads/tacv-quota-analysis ~/.cortex/skills/
+mv ~/Downloads/tacv-quota-analysis-main ~/.cortex/skills/tacv-quota-analysis
 
 # Windows
 rmdir /s %USERPROFILE%\.cortex\skills\tacv-quota-analysis
+ren %USERPROFILE%\Downloads\tacv-quota-analysis-main tacv-quota-analysis
 move %USERPROFILE%\Downloads\tacv-quota-analysis %USERPROFILE%\.cortex\skills\
 ```
 
 3. Restart Cortex Code
+
+---
 
 ## Version History
 
