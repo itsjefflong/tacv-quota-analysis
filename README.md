@@ -41,7 +41,7 @@ Cortex Code will handle the rest.
 1. Go to: [`https://github.com/itsjefflong/tacv-quota-analysis`](https://github.com/itsjefflong/tacv-quota-analysis)
 2. Click the green **Code** button → **Download ZIP**
 3. Extract the ZIP file
-4. **Important:** GitHub names the extracted folder `tacv-quota-analysis-main`. Rename it to `tacv-quota-analysis` before proceeding.
+4. **Important:** GitHub names the extracted folder `tacv-quota-analysis-master`. Rename it to `tacv-quota-analysis` before proceeding.
 
 After renaming, you should see:
 
