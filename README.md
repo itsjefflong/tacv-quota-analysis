@@ -26,7 +26,7 @@ If you're not comfortable with terminal commands, let Cortex Code do it for you:
 2. Extract the ZIP to your Downloads folder
 3. Open Cortex Code and paste:
 
-> *"I downloaded the tacv-quota-analysis skill ZIP from GitHub and extracted it to my Downloads folder. The folder is probably named `tacv-quota-analysis-main`. Can you help me rename it to `tacv-quota-analysis` and move it to my Cortex skills directory? I'm on [macOS/Windows/Linux]."*
+> *"I downloaded the tacv-quota-analysis skill ZIP from GitHub and extracted it to my Downloads folder. The folder is probably named `tacv-quota-analysis-master`. Can you help me rename it to `tacv-quota-analysis` and move it to my Cortex skills directory? I'm on [macOS/Windows/Linux]."*
 
 Cortex Code will handle the rest.
 
