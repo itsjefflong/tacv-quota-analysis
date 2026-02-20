@@ -271,4 +271,4 @@ For Cortex Code platform issues, refer to the [Snowflake Cortex documentation](h
 
 ## Maintainer
 
-Jeff — Senior Technical GTM Operations Manager, Snowflake Field Operations
+Jeff Long (@jeff.long) — Senior Technical GTM Operations Manager, Snowflake GTM
