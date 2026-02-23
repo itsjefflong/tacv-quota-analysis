@@ -48,7 +48,7 @@ After renaming, you should see:
 ```
 tacv-quota-analysis/
 ├── skill.yaml      # Skill manifest (triggers, data sources, metadata)
-├── prompt.md       # Main skill instructions (8-step workflow)
+├── skill.md       # Main skill instructions (8-step workflow)
 └── README.md       # This file
 ```
 
@@ -70,7 +70,7 @@ mv ~/Downloads/tacv-quota-analysis ~/.cortex/skills/
 
 # Verify
 ls ~/.cortex/skills/tacv-quota-analysis/
-# Expected: prompt.md  README.md  skill.yaml
+# Expected: SKILL.md  README.md  skill.yaml
 ```
 
 **Windows:**
@@ -87,7 +87,7 @@ move %USERPROFILE%\Downloads\tacv-quota-analysis %USERPROFILE%\.cortex\skills\
 
 # Verify
 dir %USERPROFILE%\.cortex\skills\tacv-quota-analysis\
-# Expected: prompt.md  README.md  skill.yaml
+# Expected: skill.md  README.md  skill.yaml
 ```
 
 > **Note:** If your Cortex Code uses a custom skills directory, replace the paths above. Check your Cortex Code settings or ask your admin for the correct location.
